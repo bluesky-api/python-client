@@ -1,0 +1,86 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.26.0
+    method: GET
+    uri: https://api.blueskyapi.io/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5
+  response:
+    body:
+      string: !!binary |
+        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
+    headers:
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 6c4562fe8f814150-HAM
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 Dec 2021 20:44:25 GMT
+      Expect-CT:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=q%2FRnu40KPvdxP0O1VsZqTV2MXCQ93nguvl2IK42KSIL6ekDdRGRyD6EliMwUx%2BI7NoANELfLR0%2BuM%2BETOspZ94zYSKrRyQZDi9Koyo1WDekzKxhgeKmHPmUqU3ecHIu%2FDB1HTA%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      alt-svc:
+      - h3=":443"; ma=86400, h3-29=":443"; ma=86400, h3-28=":443"; ma=86400, h3-27=":443";
+        ma=86400
+      content-encoding:
+      - gzip
+      strict-transport-security:
+      - max-age=15724800; includeSubDomains
+      vary:
+      - Accept-Encoding
+    status:
+      code: 200
+      message: OK
+version: 1

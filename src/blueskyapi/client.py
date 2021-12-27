@@ -49,11 +49,9 @@ class Client:
         if self.api_key is not None:
             self.session.headers.update({"Authorization": f"Bearer {self.api_key}"})
 
-    def latest_forecast(
-        self, lat, lon, prediction_distances=None, columns=None, model="gfs_0p25"
-    ):
+    def latest_forecast(self, lat, lon, prediction_distances=None, columns=None):
         response = self._get(
-            f"/forecasts/{model}/latest",
+            "/forecasts/gfs_0p25/latest",
             params=dict(
                 lat=lat,
                 lon=lon,
@@ -73,10 +71,9 @@ class Client:
         max_prediction_moment=None,
         prediction_distances=None,
         columns=None,
-        model="gfs_0p25",
     ):
         response = self._get(
-            f"/forecasts/{model}/history",
+            "/forecasts/gfs_0p25/history",
             params=dict(
                 lat=lat,
                 lon=lon,
