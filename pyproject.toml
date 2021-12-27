@@ -31,6 +31,7 @@ pytest-watch = "^4.2.0"
 pytest-cov = "^3.0.0"
 pytest-vcr = "^1.0.2"
 responses = "^0.16.0"
+autoflake = "^1.4"
 
 [tool.black]
 target-version = ['py37']

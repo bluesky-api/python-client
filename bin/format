@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -e
+
+autoflake --in-place \
+          --remove-unused-variables \
+          --imports=requests,blueskyapi \
+          -r src tests
+
+black .
+isort .
