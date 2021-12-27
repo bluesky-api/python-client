@@ -1,0 +1,41 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    name: Build package and publish to PyPI
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.10"
+
+      - name: Setup poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: "1.1.12"
+
+      - name: Authenticate poetry
+        run: poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN }}
+
+      - name: Build package
+        run: poetry build
+
+      - name: Check that tag matches version
+        id: check_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: "dist/blueskyapi-${{ github.ref_name }}.tar.gz"
+
+      - name: Publish package
+        run: poetry publish
