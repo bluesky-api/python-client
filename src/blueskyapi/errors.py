@@ -1,5 +1,6 @@
-from requests import codes
 import json
+
+from requests import codes
 
 
 class Error(Exception):

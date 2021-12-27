@@ -20,8 +20,3 @@ d = client.forecast_history(
     min_prediction_moment="2021-06-01 00:00",
 )
 print(d)
-
-
-import ptpython.repl
-
-ptpython.repl.embed(globals(), locals())

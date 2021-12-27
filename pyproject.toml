@@ -22,9 +22,24 @@ requests = "^2.0"
 
 [tool.poetry.dev-dependencies]
 black = "^21.12b0"
+isort = "^5.10.1"
+coveralls = "^3.3.1"
+pytest = "^6.2.5"
+pytest-sugar = "^0.9.4"
 
 [tool.black]
 target-version = ['py37']
+
+[tool.isort]
+py_version = 37
+profile = "black"
+force_single_line = true
+combine_as_imports = true
+lines_after_imports = 2
+src_paths = ["src", "tests"]
+
+[tool.coverage.run]
+source = ["src"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
