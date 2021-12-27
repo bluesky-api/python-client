@@ -26,8 +26,13 @@ class OverRateLimit(RequestError):
     pass
 
 
+class InvalidApiKey(RequestError):
+    pass
+
+
 _errors_by_status_code = {
     codes.too_many_requests: OverRateLimit,
+    codes.unauthorized: InvalidApiKey,
 }
 
 

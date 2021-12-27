@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -14,12 +16,19 @@ def client():
 default_result = [{"prediction_moment": "2021-12-27T18:00:00Z"}]
 
 
-def add_api_response(path, *, result=default_result, status=200):
+def add_api_response(path, *, result=default_result, status=200, api_key=None):
+    matchers = []
+    if api_key is not None:
+        matchers.append(
+            responses.matchers.header_matcher({"Authorization": f"Bearer {api_key}"})
+        )
+
     responses.add(
         responses.GET,
         blueskyapi.default_config.base_url + path,
         json=result,
         status=status,
+        match=matchers,
     )
 
 
@@ -39,6 +48,28 @@ def describe_init():
         client = blueskyapi.Client("api-key", base_url="https://example.com/api")
         assert client.base_url == "https://example.com/api"
         assert client.api_key == "api-key"
+
+
+def describe_with_api_key():
+    @responses.activate
+    def when_valid():
+        client = blueskyapi.Client(api_key="the-key")
+        add_api_response(
+            "/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5", api_key="the-key"
+        )
+        client.latest_forecast(53.5, 13.5)
+
+    @responses.activate
+    def when_invalid():
+        client = blueskyapi.Client(api_key="the-key")
+        add_api_response(
+            "/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5",
+            api_key="the-key",
+            result={"detail": "Invalid API key"},
+            status=401,
+        )
+        with pytest.raises(blueskyapi.errors.InvalidApiKey, match="401"):
+            client.latest_forecast(53.5, 13.5)
 
 
 def describe_latest_forecast():
@@ -91,7 +122,7 @@ def describe_latest_forecast():
     def test_over_rate_limit(client):
         add_api_response(
             "/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5",
-            result={"the": "result"},
+            result={"the": "error"},
             status=429,
         )
         with pytest.raises(blueskyapi.errors.OverRateLimit, match="429"):
@@ -128,3 +159,56 @@ def describe_latest_forecast():
 
         assert np.all(result.apparent_temperature_at_2m > 250)
         assert np.all(result.apparent_temperature_at_2m < 290)
+
+
+def describe_forecast_history():
+    def describe_min_prediction_moments():
+        @responses.activate
+        def with_datetime(client):
+            add_api_response(
+                "/forecasts/gfs_0p25/history"
+                "?lat=53.5&lon=13.5"
+                "&min_prediction_moment=2021-12-27T18:00:00"
+                "&max_prediction_moment=2021-12-28T00:00:00"
+            )
+            client.forecast_history(
+                53.5,
+                13.5,
+                min_prediction_moment=datetime(2021, 12, 27, 18, 0),
+                max_prediction_moment=datetime(2021, 12, 28, 0, 0),
+            )
+
+        @responses.activate
+        def with_string(client):
+            add_api_response(
+                "/forecasts/gfs_0p25/history"
+                "?lat=53.5&lon=13.5"
+                "&min_prediction_moment=2021-12-27T18:00:00"
+                "&max_prediction_moment=2021-12-28T00:00:00"
+            )
+            client.forecast_history(
+                53.5,
+                13.5,
+                min_prediction_moment="2021-12-27T18:00:00",
+                max_prediction_moment="2021-12-28T00:00:00",
+            )
+
+        @responses.activate
+        def with_invalid_value(client):
+            with pytest.raises(TypeError, match="min_prediction_moment should be"):
+                client.forecast_history(53.5, 13.5, min_prediction_moment=1)
+
+    def describe_max_prediction_moments():
+        @responses.activate
+        def with_none(client):
+            add_api_response(
+                "/forecasts/gfs_0p25/history"
+                "?lat=53.5&lon=13.5"
+                "&min_prediction_moment=2021-12-27T18:00:00"
+            )
+            client.forecast_history(
+                53.5,
+                13.5,
+                min_prediction_moment=datetime(2021, 12, 27, 18, 0),
+                max_prediction_moment=None,
+            )
