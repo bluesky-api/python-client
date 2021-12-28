@@ -8,7 +8,7 @@ class Error(Exception):
 
 
 class RequestError(Error):
-    def __init__(self, response=None):
+    def __init__(self, response):
         self.response = response
 
         msg = f"API responded with {response.status_code} - {response.reason}"
@@ -43,6 +43,6 @@ def _error_by_status_code(code):
         return RequestError
 
 
-def _request_error_from_response(response):
+def request_error_from_response(response):
     klass = _error_by_status_code(response.status_code)
     return klass(response)

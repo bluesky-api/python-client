@@ -136,6 +136,17 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "doubles"
+version = "1.5.3"
+description = "Test doubles for Python."
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = "*"
+
+[[package]]
 name = "idna"
 version = "3.3"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -584,7 +595,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.1"
-content-hash = "c4427397274a8175282999288c3fd286c1107ae5f520515f9aad7d2e4a48d475"
+content-hash = "79975de4645d7174526498a490f0b5da3b22f31edb332a6df41d0adcfbc0232c"
 
 [metadata.files]
 atomicwrites = [
@@ -673,6 +684,9 @@ coveralls = [
 ]
 docopt = [
     {file = "docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"},
+]
+doubles = [
+    {file = "doubles-1.5.3.tar.gz", hash = "sha256:3332349ea9683dc65f5866362f9f27b25cd35b1ad239db3c9d83ca5473665eba"},
 ]
 idna = [
     {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},

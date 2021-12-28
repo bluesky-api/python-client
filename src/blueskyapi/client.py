@@ -96,7 +96,7 @@ class Client:
         if response.ok:
             return response.content
         else:
-            raise errors._request_error_from_response(response)
+            raise errors.request_error_from_response(response)
 
     def _url(self, endpoint):
         return self.base_url + endpoint

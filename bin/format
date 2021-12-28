@@ -4,7 +4,7 @@ set -e
 
 autoflake --in-place \
           --remove-unused-variables \
-          --imports=requests,blueskyapi \
+          --imports=requests,blueskyapi,pandas \
           -r src tests
 
 black .
