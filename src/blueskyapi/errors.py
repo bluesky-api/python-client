@@ -1,6 +1,7 @@
 import json
+from typing import Type
 
-from requests import codes
+import requests
 
 
 class Error(Exception):
@@ -8,7 +9,7 @@ class Error(Exception):
 
 
 class RequestError(Error):
-    def __init__(self, response):
+    def __init__(self, response: requests.Response):
         self.response = response
 
         msg = f"API responded with {response.status_code} - {response.reason}"
@@ -31,18 +32,18 @@ class InvalidApiKey(RequestError):
 
 
 _errors_by_status_code = {
-    codes.too_many_requests: OverRateLimit,
-    codes.unauthorized: InvalidApiKey,
+    requests.codes.too_many_requests: OverRateLimit,
+    requests.codes.unauthorized: InvalidApiKey,
 }
 
 
-def _error_by_status_code(code):
+def _error_by_status_code(code: int) -> Type[RequestError]:
     if code in _errors_by_status_code:
         return _errors_by_status_code[code]
     else:
         return RequestError
 
 
-def request_error_from_response(response):
+def request_error_from_response(response: requests.Response) -> RequestError:
     klass = _error_by_status_code(response.status_code)
     return klass(response)

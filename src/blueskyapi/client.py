@@ -1,4 +1,7 @@
 from datetime import datetime
+from typing import Iterable
+from typing import Optional
+from typing import Union
 
 import pandas as pd
 import requests
@@ -7,13 +10,15 @@ from blueskyapi import default_config
 from blueskyapi import errors
 
 
-def _create_dataframe(response):
+def _create_dataframe(response: bytes) -> pd.DataFrame:
     df = pd.read_json(response)
     df.prediction_moment = pd.to_datetime(df.prediction_moment)
     return df
 
 
-def _prepare_comma_separated_list(value, name):
+def _prepare_comma_separated_list(
+    value: Union[str, Iterable, None], name: str
+) -> Optional[str]:
     if value is None:
         return None
     elif isinstance(value, str):
@@ -25,7 +30,7 @@ def _prepare_comma_separated_list(value, name):
         raise TypeError(f"{name} should be an array of values or None, got {value}")
 
 
-def _prepare_datetime(value, name):
+def _prepare_datetime(value: Union[datetime, str, None], name: str) -> Optional[str]:
     if value is None:
         return None
     elif isinstance(value, datetime):
@@ -39,7 +44,7 @@ def _prepare_datetime(value, name):
 
 
 class Client:
-    def __init__(self, api_key=None, base_url=None):
+    def __init__(self, api_key: Optional[str] = None, base_url: Optional[str] = None):
         self.api_key = api_key or default_config.api_key
         self.base_url = base_url or default_config.base_url
 
@@ -48,7 +53,13 @@ class Client:
         if self.api_key is not None:
             self.session.headers.update({"Authorization": f"Bearer {self.api_key}"})
 
-    def latest_forecast(self, lat, lon, prediction_distances=None, columns=None):
+    def latest_forecast(
+        self,
+        lat: float,
+        lon: float,
+        prediction_distances: Iterable[int] = None,
+        columns: Iterable[str] = None,
+    ) -> pd.DataFrame:
         response = self._get(
             "/forecasts/gfs_0p25/latest",
             params=dict(
@@ -64,13 +75,13 @@ class Client:
 
     def forecast_history(
         self,
-        lat,
-        lon,
-        min_prediction_moment,
-        max_prediction_moment=None,
-        prediction_distances=None,
-        columns=None,
-    ):
+        lat: float,
+        lon: float,
+        min_prediction_moment: Union[datetime, str],
+        max_prediction_moment: Optional[Union[datetime, str]] = None,
+        prediction_distances: Optional[Iterable[int]] = None,
+        columns: Optional[Iterable[str]] = None,
+    ) -> pd.DataFrame:
         response = self._get(
             "/forecasts/gfs_0p25/history",
             params=dict(
@@ -90,7 +101,7 @@ class Client:
         )
         return _create_dataframe(response)
 
-    def _get(self, endpoint, params={}):
+    def _get(self, endpoint: str, params: dict = {}) -> bytes:
         url = self._url(endpoint)
         response = self.session.get(url, params=params)
         if response.ok:
@@ -98,5 +109,5 @@ class Client:
         else:
             raise errors.request_error_from_response(response)
 
-    def _url(self, endpoint):
+    def _url(self, endpoint: str) -> str:
         return self.base_url + endpoint

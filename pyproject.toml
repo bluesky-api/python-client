@@ -34,6 +34,9 @@ responses = "^0.16.0"
 autoflake = "^1.4"
 pytest-describe = "^2.0.1"
 doubles = "^1.5.3"
+mypy = "^0.930"
+pandas-stubs = "^1.2.0"
+types-requests = "^2.26.3"
 
 [tool.black]
 target-version = ['py37']
