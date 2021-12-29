@@ -13,7 +13,7 @@ def client():
     return blueskyapi.Client()
 
 
-default_result = [{"prediction_moment": "2021-12-27T18:00:00Z"}]
+default_result = [{"forecast_moment": "2021-12-27T18:00:00Z"}]
 
 
 def add_api_response(path, *, result=default_result, status=200, api_key=None):
@@ -78,25 +78,25 @@ def describe_latest_forecast():
         add_api_response("/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5")
         client.latest_forecast(53.5, 13.5)
 
-    def describe_prediction_distances():
+    def describe_forecast_distances():
         @responses.activate
         def with_array(client):
             add_api_response(
-                "/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5&prediction_distances=0,24"
+                "/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5&forecast_distances=0,24"
             )
-            client.latest_forecast(53.5, 13.5, prediction_distances=[0, 24])
+            client.latest_forecast(53.5, 13.5, forecast_distances=[0, 24])
 
         @responses.activate
         def with_string(client):
             add_api_response(
-                "/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5&prediction_distances=0,24"
+                "/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5&forecast_distances=0,24"
             )
-            client.latest_forecast(53.5, 13.5, prediction_distances="0,24")
+            client.latest_forecast(53.5, 13.5, forecast_distances="0,24")
 
         @responses.activate
         def with_invalid_value(client):
-            with pytest.raises(TypeError, match="prediction_distances should be"):
-                client.latest_forecast(53.5, 13.5, prediction_distances=1.5)
+            with pytest.raises(TypeError, match="forecast_distances should be"):
+                client.latest_forecast(53.5, 13.5, forecast_distances=1.5)
 
     def describe_columns():
         @responses.activate
@@ -132,11 +132,11 @@ def describe_latest_forecast():
     def test_result(client):
         add_api_response(
             "/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5",
-            result=[{"prediction_moment": "2021-12-27T18:00:00Z", "some_column": 5}],
+            result=[{"forecast_moment": "2021-12-27T18:00:00Z", "some_column": 5}],
         )
         result = client.latest_forecast(53.5, 13.5)
         assert np.all(
-            result.prediction_moment == [pd.to_datetime("2021-12-27T18:00:00Z")]
+            result.forecast_moment == [pd.to_datetime("2021-12-27T18:00:00Z")]
         )
         assert np.all(result.some_column == [5])
 
@@ -147,9 +147,9 @@ def describe_latest_forecast():
         assert len(result.columns) == 35
         assert len(result) == 15
 
-        assert str(result.prediction_moment.dtype) == "datetime64[ns, UTC]"
+        assert str(result.forecast_moment.dtype) == "datetime64[ns, UTC]"
         assert np.all(
-            result.prediction_moment == pd.to_datetime("2021-12-27T06:00:00Z")
+            result.forecast_moment == pd.to_datetime("2021-12-29T00:00:00Z")
         )
 
         assert np.all(
@@ -157,25 +157,26 @@ def describe_latest_forecast():
             == [0, 3, 6, 9, 12, 15, 18, 21, 24, 48, 72, 96, 120, 144, 168]
         )
 
+        print(result)
         assert np.all(result.apparent_temperature_at_2m > 250)
         assert np.all(result.apparent_temperature_at_2m < 290)
 
 
 def describe_forecast_history():
-    def describe_min_prediction_moments():
+    def describe_min_forecast_moments():
         @responses.activate
         def with_datetime(client):
             add_api_response(
                 "/forecasts/gfs_0p25/history"
                 "?lat=53.5&lon=13.5"
-                "&min_prediction_moment=2021-12-27T18:00:00"
-                "&max_prediction_moment=2021-12-28T00:00:00"
+                "&min_forecast_moment=2021-12-27T18:00:00"
+                "&max_forecast_moment=2021-12-28T00:00:00"
             )
             client.forecast_history(
                 53.5,
                 13.5,
-                min_prediction_moment=datetime(2021, 12, 27, 18, 0),
-                max_prediction_moment=datetime(2021, 12, 28, 0, 0),
+                min_forecast_moment=datetime(2021, 12, 27, 18, 0),
+                max_forecast_moment=datetime(2021, 12, 28, 0, 0),
             )
 
         @responses.activate
@@ -183,32 +184,32 @@ def describe_forecast_history():
             add_api_response(
                 "/forecasts/gfs_0p25/history"
                 "?lat=53.5&lon=13.5"
-                "&min_prediction_moment=2021-12-27T18:00:00"
-                "&max_prediction_moment=2021-12-28T00:00:00"
+                "&min_forecast_moment=2021-12-27T18:00:00"
+                "&max_forecast_moment=2021-12-28T00:00:00"
             )
             client.forecast_history(
                 53.5,
                 13.5,
-                min_prediction_moment="2021-12-27T18:00:00",
-                max_prediction_moment="2021-12-28T00:00:00",
+                min_forecast_moment="2021-12-27T18:00:00",
+                max_forecast_moment="2021-12-28T00:00:00",
             )
 
         @responses.activate
         def with_invalid_value(client):
-            with pytest.raises(TypeError, match="min_prediction_moment should be"):
-                client.forecast_history(53.5, 13.5, min_prediction_moment=1)
+            with pytest.raises(TypeError, match="min_forecast_moment should be"):
+                client.forecast_history(53.5, 13.5, min_forecast_moment=1)
 
-    def describe_max_prediction_moments():
+    def describe_max_forecast_moments():
         @responses.activate
         def with_none(client):
             add_api_response(
                 "/forecasts/gfs_0p25/history"
                 "?lat=53.5&lon=13.5"
-                "&min_prediction_moment=2021-12-27T18:00:00"
+                "&min_forecast_moment=2021-12-27T18:00:00"
             )
             client.forecast_history(
                 53.5,
                 13.5,
-                min_prediction_moment=datetime(2021, 12, 27, 18, 0),
-                max_prediction_moment=None,
+                min_forecast_moment=datetime(2021, 12, 27, 18, 0),
+                max_forecast_moment=None,
             )

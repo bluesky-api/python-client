@@ -12,7 +12,7 @@ from blueskyapi import errors
 
 def _create_dataframe(response: bytes) -> pd.DataFrame:
     df = pd.read_json(response)
-    df.prediction_moment = pd.to_datetime(df.prediction_moment)
+    df.forecast_moment = pd.to_datetime(df.forecast_moment)
     return df
 
 
@@ -57,7 +57,7 @@ class Client:
         self,
         lat: float,
         lon: float,
-        prediction_distances: Iterable[int] = None,
+        forecast_distances: Iterable[int] = None,
         columns: Iterable[str] = None,
     ) -> pd.DataFrame:
         response = self._get(
@@ -65,8 +65,8 @@ class Client:
             params=dict(
                 lat=lat,
                 lon=lon,
-                prediction_distances=_prepare_comma_separated_list(
-                    prediction_distances, "prediction_distances"
+                forecast_distances=_prepare_comma_separated_list(
+                    forecast_distances, "forecast_distances"
                 ),
                 columns=_prepare_comma_separated_list(columns, "columns"),
             ),
@@ -77,9 +77,9 @@ class Client:
         self,
         lat: float,
         lon: float,
-        min_prediction_moment: Union[datetime, str],
-        max_prediction_moment: Optional[Union[datetime, str]] = None,
-        prediction_distances: Optional[Iterable[int]] = None,
+        min_forecast_moment: Union[datetime, str],
+        max_forecast_moment: Optional[Union[datetime, str]] = None,
+        forecast_distances: Optional[Iterable[int]] = None,
         columns: Optional[Iterable[str]] = None,
     ) -> pd.DataFrame:
         response = self._get(
@@ -87,14 +87,14 @@ class Client:
             params=dict(
                 lat=lat,
                 lon=lon,
-                min_prediction_moment=_prepare_datetime(
-                    min_prediction_moment, "min_prediction_moment"
+                min_forecast_moment=_prepare_datetime(
+                    min_forecast_moment, "min_forecast_moment"
                 ),
-                max_prediction_moment=_prepare_datetime(
-                    max_prediction_moment, "max_prediction_moment"
+                max_forecast_moment=_prepare_datetime(
+                    max_forecast_moment, "max_forecast_moment"
                 ),
-                prediction_distances=_prepare_comma_separated_list(
-                    prediction_distances, "prediction_distances"
+                forecast_distances=_prepare_comma_separated_list(
+                    forecast_distances, "forecast_distances"
                 ),
                 columns=_prepare_comma_separated_list(columns, "columns"),
             ),
