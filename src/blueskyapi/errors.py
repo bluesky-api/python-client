@@ -5,7 +5,7 @@ import requests
 
 
 class Error(Exception):
-    pass
+    """Base class for all blueskyapi errors."""
 
 
 class RequestError(Error):
@@ -24,11 +24,24 @@ class RequestError(Error):
 
 
 class OverRateLimit(RequestError):
-    pass
+    """Raised when a request exceeds the rate limit.
+
+    The error message includes information about your current limits
+    and used quotas.
+
+    The limit can be increased by using an API key. Even the free plan
+    includes a much higher limit than using the API without an API
+    key. You can `create an API key here <https://blueskyapi.io/getting-started>`_.
+
+    """
 
 
 class InvalidApiKey(RequestError):
-    pass
+    """Raised when the given API key can't be found.
+
+    Check `your API keys <https://blueskyapi.io/api-keys>`_ to make
+    sure you're using a valid key.
+    """
 
 
 _errors_by_status_code = {

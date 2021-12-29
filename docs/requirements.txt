@@ -1,0 +1,7 @@
+pandas-stubs
+types-requests
+Sphinx
+sphinx-rtd-theme
+sphinx-autodoc-typehints
+pandas
+requests

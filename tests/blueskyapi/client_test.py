@@ -148,9 +148,7 @@ def describe_latest_forecast():
         assert len(result) == 15
 
         assert str(result.forecast_moment.dtype) == "datetime64[ns, UTC]"
-        assert np.all(
-            result.forecast_moment == pd.to_datetime("2021-12-29T00:00:00Z")
-        )
+        assert np.all(result.forecast_moment == pd.to_datetime("2021-12-29T00:00:00Z"))
 
         assert np.all(
             result.forecast_distance

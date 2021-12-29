@@ -37,6 +37,9 @@ doubles = "^1.5.3"
 mypy = "^0.930"
 pandas-stubs = "^1.2.0"
 types-requests = "^2.26.3"
+Sphinx = "^4.3.2"
+sphinx-rtd-theme = "^1.0.0"
+sphinx-autodoc-typehints = "^1.12.0"
 
 [tool.black]
 target-version = ['py37']

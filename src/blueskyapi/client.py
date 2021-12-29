@@ -44,6 +44,17 @@ def _prepare_datetime(value: Union[datetime, str, None], name: str) -> Optional[
 
 
 class Client:
+    """Client to interact with the blueskyapi.io API.
+
+    Data is returned as a ``pandas.DataFrame`` and includes the
+    columns ``forecast_moment`` (UTC datetimes) and
+    ``forecast_distances`` (integers), as well as any columns you
+    select using the ``columns`` parameter.
+
+    :param api_key: Your API key (create one `here <https://blueskyapi.io/api-keys>`_).
+    :param base_url: Only for testing purposes. Don't use this parameter.
+    """
+
     def __init__(self, api_key: Optional[str] = None, base_url: Optional[str] = None):
         self.api_key = api_key or default_config.api_key
         self.base_url = base_url or default_config.base_url
@@ -60,6 +71,13 @@ class Client:
         forecast_distances: Iterable[int] = None,
         columns: Iterable[str] = None,
     ) -> pd.DataFrame:
+        """Obtain the latest forecast.
+
+        :param lat: Latitude for which to fetch the forecast.
+        :param lon: Longitude for which to fetch the forecast.
+        :param forecast_distances: Forecast distances to fetch data for (hours from ``forecast_moment``).
+        :param columns: Which variables to fetch (see `this page for available variables <https://blueskyapi.io/docs/data>`_).
+        """
         response = self._get(
             "/forecasts/gfs_0p25/latest",
             params=dict(
@@ -82,6 +100,15 @@ class Client:
         forecast_distances: Optional[Iterable[int]] = None,
         columns: Optional[Iterable[str]] = None,
     ) -> pd.DataFrame:
+        """Obtain historical forecasts.
+
+        :param lat: Latitude for which to fetch the forecasts.
+        :param lon: Longitude for which to fetch the forecasts.
+        :param min_forecast_moment: The first forecast moment to include.
+        :param max_forecast_moment: The last forecast moment to include.
+        :param forecast_distances: Forecast distances to return data for (hours from ``forecast_moment``).
+        :param columns: Which variables to fetch (see `this page for available variables <https://blueskyapi.io/docs/data>`_).
+        """
         response = self._get(
             "/forecasts/gfs_0p25/history",
             params=dict(
