@@ -132,7 +132,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: andstor/file-existence-action@v1
         with:
-          files: "dist/blueskyapi-${{ github.ref_name }}.tar.gz, blueskyapi-${{ github.ref_name }}-py3-none-any.whl"
+          files: "dist/blueskyapi-${{ github.ref_name }}.tar.gz, dist/blueskyapi-${{ github.ref_name }}-py3-none-any.whl"
           allow_failure: true
 
       - name: Publish package
