@@ -54,16 +54,14 @@ def describe_with_api_key():
     @responses.activate
     def when_valid():
         client = blueskyapi.Client(api_key="the-key")
-        add_api_response(
-            "/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5", api_key="the-key"
-        )
+        add_api_response("/forecasts/latest?lat=53.5&lon=13.5", api_key="the-key")
         client.latest_forecast(53.5, 13.5)
 
     @responses.activate
     def when_invalid():
         client = blueskyapi.Client(api_key="the-key")
         add_api_response(
-            "/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5",
+            "/forecasts/latest?lat=53.5&lon=13.5",
             api_key="the-key",
             result={"detail": "Invalid API key"},
             status=401,
@@ -75,21 +73,21 @@ def describe_with_api_key():
 def describe_latest_forecast():
     @responses.activate
     def test_defaults(client):
-        add_api_response("/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5")
+        add_api_response("/forecasts/latest?lat=53.5&lon=13.5")
         client.latest_forecast(53.5, 13.5)
 
     def describe_forecast_distances():
         @responses.activate
         def with_array(client):
             add_api_response(
-                "/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5&forecast_distances=0,24"
+                "/forecasts/latest?lat=53.5&lon=13.5&forecast_distances=0,24"
             )
             client.latest_forecast(53.5, 13.5, forecast_distances=[0, 24])
 
         @responses.activate
         def with_string(client):
             add_api_response(
-                "/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5&forecast_distances=0,24"
+                "/forecasts/latest?lat=53.5&lon=13.5&forecast_distances=0,24"
             )
             client.latest_forecast(53.5, 13.5, forecast_distances="0,24")
 
@@ -101,16 +99,12 @@ def describe_latest_forecast():
     def describe_columns():
         @responses.activate
         def with_array(client):
-            add_api_response(
-                "/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5&columns=col_a,col_b"
-            )
+            add_api_response("/forecasts/latest?lat=53.5&lon=13.5&columns=col_a,col_b")
             client.latest_forecast(53.5, 13.5, columns=["col_a", "col_b"])
 
         @responses.activate
         def with_string(client):
-            add_api_response(
-                "/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5&columns=col_a,col_b"
-            )
+            add_api_response("/forecasts/latest?lat=53.5&lon=13.5&columns=col_a,col_b")
             client.latest_forecast(53.5, 13.5, columns="col_a,col_b")
 
         @responses.activate
@@ -121,7 +115,7 @@ def describe_latest_forecast():
     @responses.activate
     def test_over_rate_limit(client):
         add_api_response(
-            "/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5",
+            "/forecasts/latest?lat=53.5&lon=13.5",
             result={"the": "error"},
             status=429,
         )
@@ -131,7 +125,7 @@ def describe_latest_forecast():
     @responses.activate
     def test_result(client):
         add_api_response(
-            "/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5",
+            "/forecasts/latest?lat=53.5&lon=13.5",
             result=[{"forecast_moment": "2021-12-27T18:00:00Z", "some_column": 5}],
         )
         result = client.latest_forecast(53.5, 13.5)
@@ -165,7 +159,7 @@ def describe_forecast_history():
         @responses.activate
         def with_datetime(client):
             add_api_response(
-                "/forecasts/gfs_0p25/history"
+                "/forecasts/history"
                 "?lat=53.5&lon=13.5"
                 "&min_forecast_moment=2021-12-27T18:00:00"
                 "&max_forecast_moment=2021-12-28T00:00:00"
@@ -180,7 +174,7 @@ def describe_forecast_history():
         @responses.activate
         def with_string(client):
             add_api_response(
-                "/forecasts/gfs_0p25/history"
+                "/forecasts/history"
                 "?lat=53.5&lon=13.5"
                 "&min_forecast_moment=2021-12-27T18:00:00"
                 "&max_forecast_moment=2021-12-28T00:00:00"
@@ -201,7 +195,7 @@ def describe_forecast_history():
         @responses.activate
         def with_none(client):
             add_api_response(
-                "/forecasts/gfs_0p25/history"
+                "/forecasts/history"
                 "?lat=53.5&lon=13.5"
                 "&min_forecast_moment=2021-12-27T18:00:00"
             )

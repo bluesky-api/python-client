@@ -79,7 +79,7 @@ class Client:
         :param columns: Which variables to fetch (see `this page for available variables <https://blueskyapi.io/docs/data>`_).
         """
         response = self._get(
-            "/forecasts/gfs_0p25/latest",
+            "/forecasts/latest",
             params=dict(
                 lat=lat,
                 lon=lon,
@@ -110,7 +110,7 @@ class Client:
         :param columns: Which variables to fetch (see `this page for available variables <https://blueskyapi.io/docs/data>`_).
         """
         response = self._get(
-            "/forecasts/gfs_0p25/history",
+            "/forecasts/history",
             params=dict(
                 lat=lat,
                 lon=lon,

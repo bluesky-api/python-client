@@ -11,7 +11,7 @@ interactions:
       User-Agent:
       - python-requests/2.26.0
     method: GET
-    uri: https://api.blueskyapi.io/forecasts/gfs_0p25/latest?lat=53.5&lon=13.5
+    uri: https://api.blueskyapi.io/forecasts/latest?lat=53.5&lon=13.5
   response:
     body:
       string: !!binary |
