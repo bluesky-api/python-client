@@ -8,6 +8,7 @@ readme = "README.md"
 
 homepage = "https://blueskyapi.io"
 repository = "https://github.com/bluesky-api/python-client"
+documentation = "https://blueskyapi.readthedocs.io/en/stable/"
 
 keywords = ["weather", "data", "api"]
 
