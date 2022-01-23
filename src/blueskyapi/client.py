@@ -132,7 +132,7 @@ class Client:
         url = self._url(endpoint)
         response = self.session.get(url, params=params)
         if response.ok:
-            return response.content
+            return response.text
         else:
             raise errors.request_error_from_response(response)
 
