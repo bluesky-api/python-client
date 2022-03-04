@@ -142,14 +142,13 @@ def describe_latest_forecast():
         assert len(result) == 15
 
         assert str(result.forecast_moment.dtype) == "datetime64[ns, UTC]"
-        assert np.all(result.forecast_moment == pd.to_datetime("2021-12-29T00:00:00Z"))
+        assert np.all(result.forecast_moment == pd.to_datetime("2022-03-04T00:00:00Z"))
 
         assert np.all(
             result.forecast_distance
             == [0, 3, 6, 9, 12, 15, 18, 21, 24, 48, 72, 96, 120, 144, 168]
         )
 
-        print(result)
         assert np.all(result.apparent_temperature_at_2m > 250)
         assert np.all(result.apparent_temperature_at_2m < 290)
 
@@ -205,3 +204,25 @@ def describe_forecast_history():
                 min_forecast_moment=datetime(2021, 12, 27, 18, 0),
                 max_forecast_moment=None,
             )
+
+    @pytest.mark.vcr()
+    def test_integration(client):
+        min_moment = datetime(2021, 12, 27, 18, 0)
+        max_moment = datetime(2021, 12, 28, 0, 0)
+
+        result = client.forecast_history(
+            53.5,
+            13.5,
+            min_forecast_moment=min_moment,
+            max_forecast_moment=max_moment,
+        )
+
+        assert len(result.columns) == 35
+        assert len(result) == 30
+
+        assert str(result.forecast_moment.dtype) == "datetime64[ns, UTC]"
+        assert np.all(result.forecast_moment >= pd.to_datetime("2021-12-27T18:00:00Z"))
+        assert np.all(result.forecast_moment <= pd.to_datetime("2021-12-28T00:00:00Z"))
+
+        assert np.all(result.apparent_temperature_at_2m > 250)
+        assert np.all(result.apparent_temperature_at_2m < 290)
