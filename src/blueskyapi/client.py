@@ -1,3 +1,4 @@
+import sys
 from datetime import datetime
 from typing import Iterable
 from typing import Optional
@@ -8,6 +9,7 @@ import requests
 
 from blueskyapi import default_config
 from blueskyapi import errors
+from blueskyapi.__version__ import __version__
 
 
 def _create_dataframe(response: bytes) -> pd.DataFrame:
@@ -60,6 +62,7 @@ class Client:
         self.base_url = base_url or default_config.base_url
 
         self.session = requests.Session()
+        self.session.headers.update({"User-Agent": self._user_agent()})
 
         if self.api_key is not None:
             self.session.headers.update({"Authorization": f"Bearer {self.api_key}"})
@@ -138,3 +141,14 @@ class Client:
 
     def _url(self, endpoint: str) -> str:
         return self.base_url + endpoint
+
+    def _user_agent(self) -> str:
+        python_version = sys.version.split(" ")[0]
+        return " ".join(
+            [
+                f"blueskyapi-python/{__version__}",
+                f"python/{python_version}",
+                f"pandas/{pd.__version__}",
+                f"requests/{requests.__version__}",
+            ]
+        )
