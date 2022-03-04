@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "blueskyapi"
-version = "0.1.3"
+version = "0.1.4"
 description = "Client for blueskyapi.io"
 authors = ["blueskyapi.io <contact@blueskyapi.io>"]
 license = "MIT"
