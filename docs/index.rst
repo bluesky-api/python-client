@@ -40,9 +40,9 @@ Here's a quick example to get you started, no API key needed::
     import blueskyapi
 
     client = blueskyapi.Client()
-    berlin_forecast = client.latest_forecast(53.5, 13.5)
+    berlin_forecast = client.latest_forecast(52.5, 13.5)
 
-    berlin_forecast
+    print(berlin_forecast)
     #              forecast_moment  forecast_distance  apparent_temperature_at_2m  categorical_rain_at_surface  ...  wind_v_at_80m  wind_v_at_100m  wind_v_at_max_wind  visibility_at_surface
     # 0  2021-12-29 06:00:00+00:00                  0                      272.00                            1  ...           2.33            2.33              -14.98                24128.0
     # 1  2021-12-29 06:00:00+00:00                  3                      272.16                            1  ...           2.10            2.10              -17.45                 4848.0
