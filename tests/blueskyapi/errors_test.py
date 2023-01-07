@@ -18,7 +18,7 @@ def describe_request_error():
         )
         error = errors.RequestError(response)
 
-        str(error) == inspect.cleandoc(
+        assert str(error) == inspect.cleandoc(
             """
             API responded with 400 - Some reason
 
@@ -37,7 +37,7 @@ def describe_request_error():
         )
         error = errors.RequestError(response)
 
-        str(error) == inspect.cleandoc(
+        assert str(error) == inspect.cleandoc(
             """
             API responded with 400 - Some reason
 
