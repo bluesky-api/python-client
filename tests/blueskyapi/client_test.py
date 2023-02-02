@@ -186,6 +186,14 @@ def describe_forecast_history():
             )
 
         @responses.activate
+        def with_none(client):
+            add_api_response(
+                "/forecasts/history"
+                "?lat=53.5&lon=13.5"
+            )
+            client.forecast_history(53.5, 13.5)
+
+        @responses.activate
         def with_invalid_value(client):
             with pytest.raises(TypeError, match="min_forecast_moment should be"):
                 client.forecast_history(53.5, 13.5, min_forecast_moment=1)
@@ -196,12 +204,10 @@ def describe_forecast_history():
             add_api_response(
                 "/forecasts/history"
                 "?lat=53.5&lon=13.5"
-                "&min_forecast_moment=2021-12-27T18:00:00"
             )
             client.forecast_history(
                 53.5,
                 13.5,
-                min_forecast_moment=datetime(2021, 12, 27, 18, 0),
                 max_forecast_moment=None,
             )
 

@@ -98,7 +98,7 @@ class Client:
         self,
         lat: float,
         lon: float,
-        min_forecast_moment: Union[datetime, str],
+        min_forecast_moment: Optional[Union[datetime, str]] = None,
         max_forecast_moment: Optional[Union[datetime, str]] = None,
         forecast_distances: Optional[Iterable[int]] = None,
         columns: Optional[Iterable[str]] = None,
