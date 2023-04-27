@@ -31,6 +31,13 @@ You can install it using any of the common package managers:
 
     $ pipenv install blueskyapi
 
+Or using `conda` from the conda-forge channel:
+
+.. code:: console
+
+    $ conda config --add channels conda-forge
+    $ conda install blueskyapi
+
 
 Example
 -------
