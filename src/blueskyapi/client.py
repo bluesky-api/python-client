@@ -73,6 +73,7 @@ class Client:
         lon: float,
         forecast_distances: Iterable[int] = None,
         columns: Iterable[str] = None,
+        dataset: Optional[str] = None,
     ) -> pd.DataFrame:
         """Obtain the latest forecast.
 
@@ -80,6 +81,7 @@ class Client:
         :param lon: Longitude for which to fetch the forecast.
         :param forecast_distances: Forecast distances to fetch data for (hours from ``forecast_moment``).
         :param columns: Which variables to fetch (see `this page for available variables <https://blueskyapi.io/docs/data>`_).
+        :param dataset: Which dataset to fetch data from (only for users on the Professional plan).
         """
         response = self._get(
             "/forecasts/latest",
@@ -90,6 +92,7 @@ class Client:
                     forecast_distances, "forecast_distances"
                 ),
                 columns=_prepare_comma_separated_list(columns, "columns"),
+                dataset=dataset,
             ),
         )
         return _create_dataframe(response)
@@ -102,6 +105,7 @@ class Client:
         max_forecast_moment: Optional[Union[datetime, str]] = None,
         forecast_distances: Optional[Iterable[int]] = None,
         columns: Optional[Iterable[str]] = None,
+        dataset: Optional[str] = None,
     ) -> pd.DataFrame:
         """Obtain historical forecasts.
 
@@ -111,6 +115,7 @@ class Client:
         :param max_forecast_moment: The last forecast moment to include.
         :param forecast_distances: Forecast distances to return data for (hours from ``forecast_moment``).
         :param columns: Which variables to fetch (see `this page for available variables <https://blueskyapi.io/docs/data>`_).
+        :param dataset: Which dataset to fetch data from (only for users on the Professional plan).
         """
         response = self._get(
             "/forecasts/history",
@@ -127,6 +132,7 @@ class Client:
                     forecast_distances, "forecast_distances"
                 ),
                 columns=_prepare_comma_separated_list(columns, "columns"),
+                dataset=dataset,
             ),
         )
         return _create_dataframe(response)
