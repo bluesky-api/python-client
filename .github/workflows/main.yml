@@ -81,12 +81,11 @@ jobs:
       - name: Run pytest
         run: poetry run coverage run -m pytest -p no:sugar
 
-      - name: Upload coverage data to coveralls.io
-        run: poetry run coveralls --service=github
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COVERALLS_FLAG_NAME: ${{ matrix.test-name }}
-          COVERALLS_PARALLEL: true
+      - name: Coveralls Parallel
+        uses: coverallsapp/github-action@v2
+        with:
+          flag-name: run-${{ join(matrix.*, '-') }}
+          parallel: true
 
   coveralls:
     name: Indicate completion to coveralls.io
@@ -95,11 +94,10 @@ jobs:
     container: python:3-slim
     steps:
     - name: Finished
-      run: |
-        pip3 install --upgrade coveralls
-        coveralls --service=github --finish
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: coverallsapp/github-action@v2
+      with:
+        parallel-finished: true
+        carryforward: "run-1,run-2"
 
   publish:
     name: Build package and publish to PyPI
