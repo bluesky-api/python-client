@@ -134,6 +134,19 @@ def describe_latest_forecast():
         )
         assert np.all(result.some_column == [5])
 
+    def describe_dataset():
+        @responses.activate
+        def with_valid(client):
+            add_api_response(
+                "/forecasts/latest"
+                "?lat=53.5&lon=13.5&dataset=the-dataset"
+            )
+            client.latest_forecast(
+                53.5,
+                13.5,
+                dataset="the-dataset",
+            )
+
     @pytest.mark.vcr()
     def test_integration(client):
         result = client.latest_forecast(53.5, 13.5)
@@ -210,6 +223,20 @@ def describe_forecast_history():
                 13.5,
                 max_forecast_moment=None,
             )
+
+    def describe_dataset():
+        @responses.activate
+        def with_valid(client):
+            add_api_response(
+                "/forecasts/history"
+                "?lat=53.5&lon=13.5&dataset=the-dataset"
+            )
+            client.forecast_history(
+                53.5,
+                13.5,
+                dataset="the-dataset",
+            )
+
 
     @pytest.mark.vcr()
     def test_integration(client):
