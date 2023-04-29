@@ -81,23 +81,24 @@ jobs:
       - name: Run pytest
         run: poetry run coverage run -m pytest -p no:sugar
 
-      - name: Coveralls Parallel
-        uses: coverallsapp/github-action@v2
-        with:
-          flag-name: run-${{ join(matrix.*, '-') }}
-          parallel: true
+  # Temporarily disabled because of bug on windows tests
+  #     - name: Coveralls Parallel
+  #       uses: coverallsapp/github-action@v2
+  #       with:
+  #         flag-name: run-${{ join(matrix.*, '-') }}
+  #         parallel: true
 
-  coveralls:
-    name: Indicate completion to coveralls.io
-    needs: tests
-    runs-on: ubuntu-latest
-    container: python:3-slim
-    steps:
-    - name: Finished
-      uses: coverallsapp/github-action@v2
-      with:
-        parallel-finished: true
-        carryforward: "run-1,run-2"
+  # coveralls:
+  #   name: Indicate completion to coveralls.io
+  #   needs: tests
+  #   runs-on: ubuntu-latest
+  #   container: python:3-slim
+  #   steps:
+  #   - name: Finished
+  #     uses: coverallsapp/github-action@v2
+  #     with:
+  #       parallel-finished: true
+  #       carryforward: "run-1,run-2"
 
   publish:
     name: Build package and publish to PyPI
