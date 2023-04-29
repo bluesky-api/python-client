@@ -137,10 +137,7 @@ def describe_latest_forecast():
     def describe_dataset():
         @responses.activate
         def with_valid(client):
-            add_api_response(
-                "/forecasts/latest"
-                "?lat=53.5&lon=13.5&dataset=the-dataset"
-            )
+            add_api_response("/forecasts/latest?lat=53.5&lon=13.5&dataset=the-dataset")
             client.latest_forecast(
                 53.5,
                 13.5,
@@ -200,10 +197,7 @@ def describe_forecast_history():
 
         @responses.activate
         def with_none(client):
-            add_api_response(
-                "/forecasts/history"
-                "?lat=53.5&lon=13.5"
-            )
+            add_api_response("/forecasts/history?lat=53.5&lon=13.5")
             client.forecast_history(53.5, 13.5)
 
         @responses.activate
@@ -214,10 +208,7 @@ def describe_forecast_history():
     def describe_max_forecast_moments():
         @responses.activate
         def with_none(client):
-            add_api_response(
-                "/forecasts/history"
-                "?lat=53.5&lon=13.5"
-            )
+            add_api_response("/forecasts/history?lat=53.5&lon=13.5")
             client.forecast_history(
                 53.5,
                 13.5,
@@ -227,16 +218,12 @@ def describe_forecast_history():
     def describe_dataset():
         @responses.activate
         def with_valid(client):
-            add_api_response(
-                "/forecasts/history"
-                "?lat=53.5&lon=13.5&dataset=the-dataset"
-            )
+            add_api_response("/forecasts/history?lat=53.5&lon=13.5&dataset=the-dataset")
             client.forecast_history(
                 53.5,
                 13.5,
                 dataset="the-dataset",
             )
-
 
     @pytest.mark.vcr()
     def test_integration(client):
